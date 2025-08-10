@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dynamic Funny Birthday Wishes</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+
+    body {
+      margin: 0;
+      padding: 20px;
+      height: 100vh;
+      font-family: 'Comic Neue', cursive, sans-serif;
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #3d1e00;
+      text-align: center;
+      position: relative;
+    }
+
+    #wish {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      padding: 25px 30px;
+      font-size: 1.8rem;
+      max-width: 600px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      min-height: 100px;
+      user-select: none;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    button {
+      background: #ff416c;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      margin: 0 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(255, 75, 43, 0.5);
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    }
+
+    #buttons {
+      margin-bottom: 15px;
+    }
+
+    #shareMsg {
+      min-height: 20px;
+      font-weight: 600;
+      color: #064420;
+      height: 24px;
+    }
+
+    /* Butterfly animation */
+    .butterfly {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: url('data:image/svg+xml;utf8,<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="%23FF6F61" d="M32 12c-5 0-9 6-9 12 0 6 4 12 9 12s9-6 9-12c0-6-4-12-9-12z"/></svg>') no-repeat center;
+      background-size: contain;
+      animation: flutter 8s infinite ease-in-out;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 1px rgba(0,0,0,0.15));
+    }
+
+    @keyframes flutter {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateY(-15px) rotate(15deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="wish">Generating your funny birthday wish...</div>
+
+  <div id="buttons">
+    <button id="newWishBtn">Get New Wish</button>
+    <button id="shareWhatsappBtn">Share on WhatsApp</button>
+  </div>
+
+  <div id="shareMsg"></div>
+
+  <script>
+    // Dynamic message parts
+    const adjectives = [
+      "chronologically gifted",
+      "aging like fine wine",
+      "still young at heart",
+      "a classic in the making",
+      "an unstoppable force",
+      "the human version of a timeless meme",
+      "a legend in your own lunch break"
+    ];
+
+    const jokes = [
+      "who's not getting older, just more legendary",
+      "who's only getting better at forgetting their age",
+      "who’s a year closer to a senior discount",
+      "who knows every birthday cake should come with a fire extinguisher",
+      "who’s proof that wisdom doesn’t always come with age",
+      "who's mastered the art of aging like a boss",
+      "who still rocks socks with sandals"
+    ];
+
+    const endings = [
+      "Happy Birthday!",
+      "Celebrate like it’s your first!",
+      "Here’s to many more laughs!",
+      "Keep shining and cake-eating!",
+      "Time to party like a pro!"
+    ];
+
+    // DOM refs
+    const wishDiv = document.getElementById('wish');
+    const newWishBtn = document.getElementById('newWishBtn');
+    const shareWhatsappBtn = document.getElementById('shareWhatsappBtn');
+    const shareMsg = document.getElementById('shareMsg');
+
+    // Generate dynamic wish
+    function generateBirthdayWish() {
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const joke = jokes[Math.floor(Math.random() * jokes.length)];
+      const ending = endings[Math.floor(Math.random() * endings.length)];
+      return `You're ${adj}, ${joke}. ${ending}`;
+    }
+
+    // Show wish on page load and on button click
+    function showWish() {
+      wishDiv.textContent = generateBirthdayWish();
+      shareMsg.textContent = '';
+    }
+
+    newWishBtn.addEventListener('click', showWish);
+
+    // WhatsApp share functionality
+    shareWhatsappBtn.addEventListener('click', () => {
+      const textToShare = encodeURIComponent(wishDiv.textContent + " 🎉🎂");
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${textToShare}`;
+      window.open(whatsappUrl, '_blank');
+      shareMsg.textContent = 'Opening WhatsApp share...';
+      setTimeout(() => (shareMsg.textContent = ''), 3000);
+    });
+
+    // Create multiple butterflies with random positions and delays
+    function createButterflies(num = 7) {
+      for (let i = 0; i < num; i++) {
+        const butterfly = document.createElement('div');
+        butterfly.classList.add('butterfly');
+        butterfly.style.top = Math.random() * window.innerHeight + 'px';
+        butterfly.style.left = Math.random() * window.innerWidth + 'px';
+        butterfly.style.animationDelay = (Math.random() * 8) + 's';
+        butterfly.style.opacity = 0.5 + Math.random() * 0.5;
+        document.body.appendChild(butterfly);
+      }
+    }
+
+    // Initialize
+    showWish();
+    createButterflies();
+
+  </script>
+</body>
+</html>
